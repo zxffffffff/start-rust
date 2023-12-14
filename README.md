@@ -17,10 +17,13 @@
 ```bash
 # On Unix: 下载并运行 rustup-init.sh 在线安装
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-# On Windows: 下载并运行 rustup-init.exe
+# On Windows: 下载并运行 rustup-init.exe 在线安装
 https://static.rust-lang.org/rustup/dist/i686-pc-windows-gnu/rustup-init.exe
 
-rustc --version      # 版本
+# 选择 1 默认安装
+# 安装完成需要 source 或重启，否则无法识别 rustc
+
+rustc --version      # 版本: rustc 1.74.1 (a28077b28 2023-12-04)
 rustup update        # 更新 Rust
 ```
 
@@ -29,7 +32,7 @@ rustup update        # 更新 Rust
 安装 `Rustup` 时也会安装 `Rust` 构建工具和包管理器的最新稳定版，即 `Cargo`。
 
 ```bash
-cargo --version      # 版本
+cargo --version      # 版本: cargo 1.74.1 (ecb9851af 2023-10-18)
 cargo new start-rust # 创建新项目
 cargo build          # 构建项目
 cargo run            # 运行项目
