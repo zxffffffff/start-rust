@@ -47,20 +47,18 @@ cargo publish        # 将库发布到 crates.io。
 
 包仓库：https://crates.io/
 
-## 4、编译器
+## 4、编译器 & 调试器
 
-`VS Code` 使用 `rust-analyzer` 插件。
-
-注意：需要安装带有 `C/C++` 链接器的工具集来组合 `Rust` 编译器输出。
+VS Code 安装 `rust-analyzer` 分析器插件。
 
 ### Windows
-
-依赖 `Microsoft C++ Build Tools` 并选择 “使用 C++ 进行桌面开发”。
+- 依赖 `Microsoft C++ Build Tools` 并选择 `使用 C++ 进行桌面开发`。
+- VS Code 安装 `C/C++` 调试器插件。
 
 ### macOS
-
-依赖 `Xcode`，可以通过 `xcode-select --install` 安装。
+- 依赖 `Xcode`，可以通过 `xcode-select --install` 安装。
+- VS Code 安装 `CodeLLDB` 调试器插件。
 
 ### Linux
-
-依赖 `GCC`，可以通过 `sudo apt-get install build-essential` 安装。
+- 依赖 `GCC`，可以通过 `sudo apt-get install build-essential` 安装。
+- VS Code 安装 `CodeLLDB` 调试器插件。
