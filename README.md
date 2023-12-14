@@ -34,7 +34,7 @@ rustup update        # 更新 Rust
 ```bash
 cargo --version      # 版本: cargo 1.74.1 (ecb9851af 2023-10-18)
 cargo new start-rust # 创建新项目
-cargo build          # 构建项目
+cargo build          # 构建项目 --release
 cargo run            # 运行项目
 cargo test           # 测试项目
 cargo doc            # 为项目构建文档
