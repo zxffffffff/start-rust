@@ -2,11 +2,13 @@
 
 一个 Rust 跨平台脚手架项目，使用 C/C++ vcpkg 集成搭建
 
+
 # `Rust`
 
 官网：https://www.rust-lang.org/zh-CN/
 
 仓库：https://github.com/rust-lang
+
 
 ## 1、`Rustup`：`Rust` 安装器和版本管理工具
 
@@ -27,6 +29,7 @@ rustc --version      # 版本: rustc 1.74.1 (a28077b28 2023-12-04)
 rustup update        # 更新 Rust
 ```
 
+
 ## 2、`Cargo`：`Rust` 的构建工具和包管理器
 
 安装 `Rustup` 时也会安装 `Rust` 构建工具和包管理器的最新稳定版，即 `Cargo`。
@@ -36,18 +39,25 @@ cargo --version      # 版本: cargo 1.74.1 (ecb9851af 2023-10-18)
 cargo new start-rust # 创建新项目
 cargo build          # 构建项目 --release
 cargo run            # 运行项目
-cargo test           # 测试项目
+cargo test           # 单元测试
 cargo doc            # 为项目构建文档
-cargo publish        # 将库发布到 crates.io。
+cargo publish        # 将库发布到 crates.io
+cargo add xxx        # 添加依赖库 Cargo.toml
 ```
 
-## 3、`crates`：包
-
-包依赖文件：`Cargo.toml`
+配置文件：`Cargo.toml`
 
 包仓库：https://crates.io/
 
-## 4、编译器 & 调试器
+### `crates`：包
+
+`crate` 分为两种：`binary crate` and `library crate`，一个包可以包含任意多个 `binary crate`，但最多只能包含一个 `library crate`。
+
+- `src/main.rs` 和 `src/lib.rs` 是根文件，编译器从这里开始查找。
+- `src/lib/mod.rs` 旧的写法
+
+
+## 3、编译器 & 调试器
 
 VS Code 安装 `rust-analyzer` 分析器插件。
 

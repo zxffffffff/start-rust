@@ -75,9 +75,7 @@ fn defining_enum() {
     let _loopback2 = IpAddr2::V6(String::from("::1"));
 
     let _quit = Message::Quit;
-    let _move = Message::Move { x: 50, y: 100 };
-    // let _x = _move.x;
-    // let _y = _move.y;
+    let _move = Message::Move { _x: 50, _y: 100 };
     let _write = Message::Write(String::from("msg"));
     let _color = Message::ChangeColor(255, 0, 0);
 
@@ -111,7 +109,7 @@ enum IpAddr2 {
 // 各种类型
 enum Message {
     Quit,
-    Move { x: i32, y: i32 },
+    Move { _x: i32, _y: i32 },
     Write(String),
     ChangeColor(i32, i32, i32),
 }

@@ -74,7 +74,7 @@ fn data_types() {
     // let _out_of_bounds = months[12]; // 编译时报错
     // 编译器无法识别，不会提示！
     let _i: usize = "12".parse().expect("");
-    // let _out_of_bounds = months[_i]; // 编译通过，运行时错误，程序退出
+    // let _out_of_bounds = months[_i]; // 越界，程序崩溃
 }
 
 fn functions(input: i32, input2: f64) -> (i32, f64) {
@@ -182,7 +182,7 @@ fn references_and_borrowing() {
 }
 
 fn slices() {
-    // 字符串切片
+    // 切片
     let s = String::from("hello world");
     let _hello = &s[..5]; // [0..5]
     let _world = &s[6..]; // [6..11]
