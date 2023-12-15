@@ -9,14 +9,18 @@ use std::io::{self, stdout, BufWriter};
 // 2、文件名 src/xxx.rs 或 文件夹名 src/xxx/mod.rs
 // use <crate>::<xxx>::<代码声明>
 mod learn_base;
+mod learn_struct;
 use crate::learn_base::test_base;
+use crate::learn_struct::test_struct;
 
 fn main() {
     // 基础语法
     test_base();
+    // 数据结构
+    test_struct();
 
     // 命令行输入
-    println!("请输入：");
+    println!("输入你的名字：");
     let mut message = String::new();
     io::stdin()
         .read_line(&mut message)

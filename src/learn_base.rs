@@ -119,21 +119,19 @@ fn control_flow() {
     let mut i = 10;
     while i > 0 {
         i -= 1;
-        // println!("i = {i}");
+        println!("i = {i}");
     }
 
     // for 循环遍历
     let a = ['a', 'b', 'c'];
     for element in a {
-        // println!("element = {element}");
-        let _ = element;
+        println!("element = {element}");
     }
 
     // for range [start, end)
     for number in (0..10).rev() {
         // rev 反转
-        // println!("number = {number}");
-        let _ = number;
+        println!("number = {number}");
     }
 }
 
