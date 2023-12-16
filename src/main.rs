@@ -12,6 +12,7 @@ mod learn_collection;
 mod learn_struct;
 mod learn_thread;
 mod learn_vcpkg;
+mod bindgen;
 
 // use 类似 using namespace
 // 1、绝对路径以 crate 开头，相对路径使用 self、super

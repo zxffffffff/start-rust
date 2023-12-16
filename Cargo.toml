@@ -4,14 +4,21 @@ version = "0.1.0"
 edition = "2021"
 build = "build.rs"
 
-# 第三方库
+[profile.release]
+panic = 'abort'
+
+# 添加 crates.io 第三方依赖
 [dependencies]
 ferris-says = "0.3.1"
-random = "0.14.0"
 
-# 第三方库，辅助编译
+# 在构建脚本中使用
 [build-dependencies]
 bindgen = "0.69.1"
 
-[profile.release]
-panic = 'abort'
+# 可以包含多个 binary crate
+# [[bin]]
+# 默认是 src/main.rs
+
+# 只能包含一个 library crate
+# [lib]
+# 默认是 src/lib.rs

@@ -1,4 +1,5 @@
 use std::fs;
+use std::io::Write;
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -110,7 +111,18 @@ fn main() {
     let bindgen_dir = "./src/bindgen";
     let bindgen_dir_path = PathBuf::from(bindgen_dir);
     let zlib_rs = "zlib.rs";
-    bindings
-        .write_to_file(bindgen_dir_path.join(zlib_rs))
-        .expect("Failed to write bindings!");
+    let zlib_rs_path = bindgen_dir_path.join(zlib_rs);
+
+    let mut zlib_rs_code = bindings.to_string();
+    let code_start = "#![allow(warnings)]\r\n";
+    zlib_rs_code.insert_str(0, code_start);
+
+    let mut zlib_rs_file = std::fs::OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(zlib_rs_path)
+        .expect("Failed to open zlib_rs_code");
+    zlib_rs_file
+        .write_all(zlib_rs_code.as_bytes())
+        .expect("Failed to write zlib_rs_code");
 }

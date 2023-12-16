@@ -6,16 +6,16 @@
 ## 目录
 ```bash
 # Rust
-/src/*.rs       # 源码
-/Cargo.toml     # 依赖管理
-/build.rs       # 编译脚本
-/target         # 编译产物
+src/*.rs       # 源码
+Cargo.toml     # 依赖管理
+build.rs       # 编译脚本
+target         # 编译产物
 
 # C++ 
-/vcpkg          # 依赖管理 (为了简单，这里使用 git submodule 引入)
-/vcpkg.json     # 依赖管理 (引入 zlib，会从网络下载最新版本 & 编译)
-/CMakeLists.txt # 编译脚本 (已加入 cargo build 一起编译)
-/build          # 编译产物 (vcpkg_installed 头文件和库)
+vcpkg          # 依赖管理 (为了简单，这里使用 git submodule 引入)
+vcpkg.json     # 依赖管理 (引入 zlib，会从网络下载最新版本 & 编译)
+CMakeLists.txt # 编译脚本 (已加入 cargo build 一起编译)
+build          # 编译产物 (vcpkg_installed 头文件和库)
 ```
 
 
@@ -84,7 +84,7 @@ cargo add xxx        # 添加依赖库 Cargo.toml
 
 ### `crates`：包
 
-`crate` 分为两种：`binary crate` and `library crate`，一个包可以包含任意多个 `binary crate`，但最多只能包含一个 `library crate`。
+`crate` 分为两种：`binary crate` and `library crate`，一个包可以包含任意多个 `binary crate`，但只能包含一个 `library crate`。
 
 - `src/main.rs` 和 `src/lib.rs` 是根文件，编译器从这里开始查找。
 - `src/lib/mod.rs` 旧的写法
