@@ -2,6 +2,7 @@
 name = "start-rust"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
 [dependencies]
 # 第三方库

@@ -3,6 +3,22 @@
 一个 Rust 跨平台脚手架项目，使用 C/C++ vcpkg 集成搭建
 
 
+## 目录
+```bash
+# Rust
+/src/*.rs       # 源码
+/Cargo.toml     # 依赖管理
+/build.rs       # 编译脚本
+/target         # 编译产物
+
+# C++ 
+/vcpkg          # 依赖管理 (为了简单，这里使用 git submodule 引入)
+/vcpkg.json     # 依赖管理 (引入 zlib，会从网络下载最新版本 & 编译)
+/CMakeLists.txt # 编译脚本 (已加入 cargo build 一起编译)
+/build          # 编译产物 (vcpkg_installed 头文件和库)
+```
+
+
 # `Rust`
 
 官网：https://www.rust-lang.org/zh-CN/
@@ -24,6 +40,7 @@
 | x86_64-pc-windows-gnu	    | 64-bit MinGW (Windows 7+)               |
 | x86_64-pc-windows-msvc    | 64-bit MSVC (Windows 7+)                |
 | x86_64-unknown-linux-gnu	| 64-bit Linux (kernel 3.2+, glibc 2.17+) |
+...
 
 
 ## 1、`Rustup`：`Rust` 安装器和版本管理工具
@@ -75,7 +92,7 @@ cargo add xxx        # 添加依赖库 Cargo.toml
 
 ## 3、编译器 & 调试器
 
-VS Code 安装 `rust-analyzer` 分析器插件。
+VS Code 需要安装 `rust-analyzer` 分析器插件。
 
 ### Windows
 - 依赖 `Microsoft C++ Build Tools` 并选择 `使用 C++ 进行桌面开发`。
@@ -88,3 +105,60 @@ VS Code 安装 `rust-analyzer` 分析器插件。
 ### Linux
 - 依赖 `GCC`，可以通过 `sudo apt-get install build-essential` 安装。
 - VS Code 安装 `CodeLLDB` 调试器插件。
+
+
+# `Vcpkg`
+
+仓库：https://github.com/microsoft/vcpkg
+
+C++参考：https://github.com/zxffffffff/start-cpp-vcpkg
+
+平台支持:
+- `built-in triplets` 微软支持：
+    - x64-linux
+    - x64-windows
+    - x64-windows-static
+    - x86-windows
+    - arm64-windows
+    - x64-uwp
+    - x64-osx
+    - arm-uwp
+- `community triplets` 社区支持：
+    - x86-linux
+    - arm-linux
+    - arm64-osx
+    - arm64-ios
+    - arm-windows
+    - x86-android
+    - armv6-android
+    - ...
+
+## C++ 编译环境
+
+需要安装 `CMake`，建议下载最新版本：https://cmake.org/download/
+
+VS Code **建议安装** `CMake Tools` 插件，可以手动配置编译参数，文件修改后会自动编译。
+> 注意：`build.rs` 也会执行 `vcpkg` 和 `cmake` 命令，两者并不冲突
+
+### Windows
+- Windows 7 或更新的版本
+- Visual Studio 2015 Update 3 或更新的版本 (包含英文语言包)
+
+### macOS
+- Apple Developer Tools
+```bash
+xcode-select --install
+```
+
+### Linux
+- g++ >= 6
+```Bash
+# Debian，Ubuntu，popOS 或其他基于 Debian 的发行版:
+sudo apt-get update
+sudo apt-get install build-essential tar curl zip unzip
+
+# CentOS
+sudo yum install centos-release-scl
+sudo yum install devtoolset-7
+scl enable devtoolset-7 bash
+```
