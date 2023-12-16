@@ -4,10 +4,14 @@ version = "0.1.0"
 edition = "2021"
 build = "build.rs"
 
-[dependencies]
 # 第三方库
+[dependencies]
 ferris-says = "0.3.1"
 random = "0.14.0"
+
+# 第三方库，辅助编译
+[build-dependencies]
+bindgen = "0.69.1"
 
 [profile.release]
 panic = 'abort'

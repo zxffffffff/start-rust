@@ -133,7 +133,8 @@ C++参考：https://github.com/zxffffffff/start-cpp-vcpkg
     - armv6-android
     - ...
 
-## C++ 编译环境
+
+## 1、C++ 编译环境
 
 需要安装 `CMake`，建议下载最新版本：https://cmake.org/download/
 
@@ -162,3 +163,32 @@ sudo yum install centos-release-scl
 sudo yum install devtoolset-7
 scl enable devtoolset-7 bash
 ```
+
+
+## 2、Rust FFI bindings to C/C++
+
+使用 `bindgen` 工具生成 Rust to C/C++ 的绑定代码，依赖 `Clang` 5.0 以上。
+
+参考：https://rust-lang.github.io/rust-bindgen/
+
+> build/vcpkg_installed/arm64-osx/include/**zlib.h** => src/bindgen/**zlib.rs**
+
+### Windows
+```bash
+# 手动安装，配置环境变量
+set LIBCLANG_PATH=C:\Program Files\LLVM\bin
+```
+
+### macOS
+```bash
+brew install llvm
+```
+
+## Linux
+```bash
+# Debian-based Linuxes, Ubuntu
+apt install llvm-dev libclang-dev clang
+
+# ...
+```
+

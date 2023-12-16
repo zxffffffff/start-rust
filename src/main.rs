@@ -5,33 +5,35 @@ use ferris_says::say;
 use std::env;
 use std::io::{self, stdout, BufWriter};
 
-// mod 关键字声明模块
-// 1、绝对路径以 crate 开头，相对路径使用 self、super
-// 2、文件名 src/xxx.rs 或 文件夹名 src/xxx/mod.rs
-// 3、支持别名 use crate::xxx::yyy as zzz
+// mod 声明模块
 mod learn_base;
 mod learn_base2;
 mod learn_collection;
 mod learn_struct;
 mod learn_thread;
-use crate::learn_base::test_base;
-use crate::learn_base2::test_base2;
-use crate::learn_collection::test_collection;
-use crate::learn_struct::test_struct;
-use crate::learn_thread::test_thread;
+mod learn_vcpkg;
+
+// use 类似 using namespace
+// 1、绝对路径以 crate 开头，相对路径使用 self、super
+// 2、文件名 src/xxx.rs 或 文件夹名 src/xxx/mod.rs
+// 3、支持别名 use crate::xxx::yyy as zzz
+use crate::learn_base::test_base; // 可以不使用 crate
+use learn_base2::test_base2;
 
 // main 也可以返回 Result<(), E>
 fn main() {
     // 基础语法
     test_base();
     // 数据结构
-    test_struct();
+    learn_struct::test_struct();
     // 容器
-    test_collection();
+    learn_collection::test_collection();
     // 基础进阶
     test_base2();
     // 多线程
-    test_thread();
+    learn_thread::test_thread();
+    // vcpkg zlib
+    learn_vcpkg::learn_zlib::test_zlib();
 
     // 进程参数
     let args: Vec<String> = env::args().collect();
