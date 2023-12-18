@@ -176,6 +176,7 @@ scl enable devtoolset-7 bash
 ### Windows
 ```bash
 # 手动安装，配置环境变量
+http://releases.llvm.org/download.html
 set LIBCLANG_PATH=C:\Program Files\LLVM\bin
 ```
 

@@ -10,25 +10,28 @@ macro_rules! warning {
 }
 
 fn main() {
+    let is_debug_mode = cfg!(debug_assertions);
+    let build_mode = if is_debug_mode { "Debug" } else { "Release" };
+
     // [1] vcpkg init
     let vcpkg_root = "./vcpkg";
     let vcpkg_exe: String;
     let vcpkg_sh: String;
     match std::env::consts::OS {
-        "linux" => {
-            warning!("当前系统是 Linux");
-            vcpkg_exe = format!("{vcpkg_root}/vcpkg");
-            vcpkg_sh = format!("{vcpkg_root}/bootstrap-vcpkg.sh");
-        }
-        "macos" => {
-            warning!("当前系统是 macOS");
-            vcpkg_exe = format!("{vcpkg_root}/vcpkg");
-            vcpkg_sh = format!("{vcpkg_root}/bootstrap-vcpkg.sh");
-        }
         "windows" => {
-            warning!("当前系统是 Windows");
+            warning!("当前系统是 Windows {build_mode}");
             vcpkg_exe = format!("{vcpkg_root}/vcpkg.exe");
             vcpkg_sh = format!("{vcpkg_root}/bootstrap-vcpkg.bat");
+        }
+        "macos" => {
+            warning!("当前系统是 macOS {build_mode}");
+            vcpkg_exe = format!("{vcpkg_root}/vcpkg");
+            vcpkg_sh = format!("{vcpkg_root}/bootstrap-vcpkg.sh");
+        }
+        "linux" => {
+            warning!("当前系统是 Linux {build_mode}");
+            vcpkg_exe = format!("{vcpkg_root}/vcpkg");
+            vcpkg_sh = format!("{vcpkg_root}/bootstrap-vcpkg.sh");
         }
         _ => panic!("未知操作系统"),
     }
@@ -41,9 +44,9 @@ fn main() {
             warning!("vcpkg 首次初始化，请确保网络访问正常...");
             let status = Command::new(vcpkg_sh_path)
                 .status()
-                .expect(&format!("Failed to run {vcpkg_sh}"));
+                .expect(&format!("vcpkg 初始化失败：{vcpkg_sh}"));
             if !status.success() {
-                panic!("Failed to init vcpkg");
+                panic!("vcpkg 初始化失败：{status}");
             }
         }
     }
@@ -53,20 +56,15 @@ fn main() {
     let build_dir_path = std::path::Path::new(&build_dir);
     let build_cache = format!("{build_dir}/CMakeCache.txt");
     let build_cache_path = std::path::Path::new(&build_cache);
-    let build_mode = if cfg!(debug_assertions) {
-        "Debug"
-    } else {
-        "Release"
-    };
-    warning!("vcpkg 依赖需要下载和编译，请确保网络访问正常...");
+    warning!("cmake vcpkg 依赖需要下载和编译，请确保网络访问正常...");
     fn cmake_build() {
         let status = Command::new("cmake")
             .arg("--build")
             .arg("build")
             .status()
-            .expect("Failed to run cmake command");
+            .expect("cmake 编译失败");
         if !status.success() {
-            panic!("Failed to run cmake build");
+            panic!("cmake 编译失败：{status}");
         }
     }
     match fs::metadata(build_cache_path) {
@@ -82,9 +80,9 @@ fn main() {
                 .arg("-S")
                 .arg(".")
                 .status()
-                .expect("Failed to run cmake command");
+                .expect("cmake 初始化失败");
             if !status.success() {
-                panic!("Failed to run cmake");
+                panic!("cmake 初始化失败：{status}");
             }
             cmake_build();
         }
@@ -92,10 +90,41 @@ fn main() {
 
     // [3] bindgen
     warning!("bindgen 正在生成头文件...");
-    let lib_dir = "./build/vcpkg_installed/arm64-osx/debug/lib"; // todo debug
+    let lib_dir;
+    let head_dir;
+    let zlib_lib;
+    match std::env::consts::OS {
+        "windows" => {
+            if is_debug_mode {
+                lib_dir = "./build/vcpkg_installed/x64-windows-static/debug/lib";
+                zlib_lib = "zlibd"; // zlibd.lib
+            } else {
+                lib_dir = "./build/vcpkg_installed/x64-windows-static/lib";
+                zlib_lib = "zlib"; // zlib.lib
+            };
+            head_dir = "./build/vcpkg_installed/x64-windows-static/include";
+        }
+        "macos" => {
+            lib_dir = if is_debug_mode {
+                "./build/vcpkg_installed/arm64-osx/debug/lib"
+            } else {
+                "./build/vcpkg_installed/arm64-osx/lib"
+            };
+            head_dir = "./build/vcpkg_installed/arm64-osx/include";
+            zlib_lib = "z"; // libz.a
+        }
+        "linux" => {
+            lib_dir = if is_debug_mode {
+                "./build/vcpkg_installed/x64-linux/debug/lib"
+            } else {
+                "./build/vcpkg_installed/x64-linux/lib"
+            };
+            head_dir = "./build/vcpkg_installed/x64-linux/include";
+            zlib_lib = "z"; // libz.a
+        }
+        _ => panic!("未知操作系统"),
+    }
     let lib_dir_path = std::path::Path::new(lib_dir).to_str().unwrap();
-    let head_dir = "./build/vcpkg_installed/arm64-osx/include";
-    let zlib_lib = "z"; // libz
     let zlib_head = "zlib.h";
     let zlib_head_path = format!("{head_dir}/{zlib_head}");
     let zlib_head_path = std::path::Path::new(&zlib_head_path).to_str().unwrap();
@@ -106,7 +135,7 @@ fn main() {
         .header(zlib_head_path)
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
-        .expect("Failed to generate bindings");
+        .expect("bindgen zlib_head_path 生成失败");
 
     let bindgen_dir = "./src/bindgen";
     let bindgen_dir_path = PathBuf::from(bindgen_dir);
@@ -121,8 +150,8 @@ fn main() {
         .write(true)
         .truncate(true)
         .open(zlib_rs_path)
-        .expect("Failed to open zlib_rs_code");
+        .expect("bindgen zlib_rs 打开失败");
     zlib_rs_file
         .write_all(zlib_rs_code.as_bytes())
-        .expect("Failed to write zlib_rs_code");
+        .expect("bindgen zlib_rs 写入失败");
 }
